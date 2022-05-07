@@ -424,14 +424,14 @@ console.log(mode);
   Show Nearby Bikes And Transit
 </button>
 {:else if mode == "loading"}
-<span class="amode_button" style="background: lightgrey; padding: 5px; position: absolute; bottom: 42%; margin: auto; left: 0; display: block; left: 50%;
+<span class="mode_button" style="background: white; color: black; border: solid 2px black; padding: 5px; position: absolute; bottom: 42%; margin: auto; left: 0; display: block; left: 50%;
 -webkit-transform: translateX(-50%);
 -moz-transform: translateX(-50%);
 transform: translateX(-50%);">
-Loading results.
+Loading results ...
 </span>
 {:else if mode == "starting"}
-<span class="mode_button" style="background: purple; color: white; padding: 5px; position: absolute; bottom: 42%; margin: auto; left: 0; display: block; left: 50%;
+<span class="mode_button" style="background: white; color: black; border: solid 2px black; padding: 5px; position: absolute; bottom: 42%; margin: auto; left: 0; display: block; left: 50%;
 -webkit-transform: translateX(-50%);
 -moz-transform: translateX(-50%);
 transform: translateX(-50%);">
@@ -442,7 +442,7 @@ Click a point to see nearby bikesharing and transit.
 -webkit-transform: translateX(-50%);
 -moz-transform: translateX(-50%);
 transform: translateX(-50%);" on:click|preventDefault={function() {mode = "selecting"}} type="button">
-Select a new location.
+Select a new location
 </button>
 {/if}
 

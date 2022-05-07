@@ -437,6 +437,8 @@ function addPopup(e, coordinates) {
 }
 </script>
 
+{#if $geojson_store}
+
 <div style="position: absolute; background: white; top: 5%; right: 5%; display: block; padding: 10px;">
 
   <div on:input|preventDefault={toggleMapLayer}>
@@ -484,3 +486,5 @@ function addPopup(e, coordinates) {
        Transit Stations</label>
     </div>
 </div>
+
+{/if}
