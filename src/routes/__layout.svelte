@@ -317,6 +317,29 @@ console.log(mode);
 
 </script>
 
+<svelte:head>
+
+  <title>Find Bikes and Transit Near You</title>
+
+  
+  <meta name="description" content="Find Bikes and Transit Near You">
+  
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://freego.netlify.app">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Find Bikes and Transit Near You">
+  <meta property="og:description" content="And start living car free!">
+  <meta property="og:image" content="https://www.hellowonderful.co/wp-content/uploads/2022/03/family-cargo-bike-ferla-MAIN.jpg.webp">
+  
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="freego.netlify.app">
+  <meta property="twitter:url" content="https://freego.netlify.app">
+  <meta name="twitter:title" content="Find Bikes and Transit Near You">
+  <meta name="twitter:description" content="And start living car free!">
+  <meta name="twitter:image" content="https://www.hellowonderful.co/wp-content/uploads/2022/03/family-cargo-bike-ferla-MAIN.jpg.webp">
+</svelte:head>
+
 <!-- This script runs first, as soon as the page is loaded, before anything in the script tag above -->
 <!-- The very first thing we do is load data from the backend, so we can populate the map with it -->
 <!-- <script context="module">
