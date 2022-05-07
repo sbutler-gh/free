@@ -329,7 +329,7 @@ console.log(mode);
   <meta property="og:type" content="website">
   <meta property="og:title" content="Find Bikes and Transit Near You">
   <meta property="og:description" content="And start living car free!">
-  <meta property="og:image" content="https://www.hellowonderful.co/wp-content/uploads/2022/03/family-cargo-bike-ferla-MAIN.jpg.webp">
+  <meta property="og:image" content="https://images.squarespace-cdn.com/content/v1/58a1c69f5016e176238a2ae8/1605195330050-OVDXMMS41AZ5J1NJH9KS/GSD-G2-clubhousefort.jpg">
   
   <!-- Twitter Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
@@ -337,7 +337,7 @@ console.log(mode);
   <meta property="twitter:url" content="https://freego.netlify.app">
   <meta name="twitter:title" content="Find Bikes and Transit Near You">
   <meta name="twitter:description" content="And start living car free!">
-  <meta name="twitter:image" content="https://www.hellowonderful.co/wp-content/uploads/2022/03/family-cargo-bike-ferla-MAIN.jpg.webp">
+  <meta name="twitter:image" content="https://images.squarespace-cdn.com/content/v1/58a1c69f5016e176238a2ae8/1605195330050-OVDXMMS41AZ5J1NJH9KS/GSD-G2-clubhousefort.jpg">
 </svelte:head>
 
 <!-- This script runs first, as soon as the page is loaded, before anything in the script tag above -->
