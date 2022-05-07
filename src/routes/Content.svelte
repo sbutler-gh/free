@@ -22,6 +22,15 @@
 
     let geojson_array = $geojson_store.features;
 
+    if (map.getLayer('transit-line')) {
+
+console.log('removing;')
+map.removeLayer('transit-line'); 
+map.removeLayer('transit-point'); 
+map.removeSource('transit-points');
+map.removeSource('transit-lines');
+}
+
     if (map.getLayer('bicycle-point')) {
 
       console.log('removing');
@@ -29,6 +38,16 @@
       map.removeLayer('bicycle-line'); 
       map.removeSource('bicycle-points');
       map.removeSource('bicycle-lines');
+    }
+
+    let transit_points_data = {
+        "type": "FeatureCollection",
+        "features": geojson_array.filter(feature => feature.properties?.type != "route" && feature.properties?.amenity != "bicycle_rental" && feature.properties?.shop != "bicycle")
+    }
+
+    let transit_lines_data = {
+        "type": "FeatureCollection",
+        "features": geojson_array.filter(feature => feature.properties?.type == "route" && feature.properties?.route != "bicycle")
     }
 
     let bike_points_data = {
@@ -41,9 +60,15 @@
         "features": geojson_array.filter(feature => feature.properties?.type == "route" && feature.properties?.route == "bicycle")
     }
 
-    console.log(bike_points_data);
-    console.log(bike_lines_data);
+    map.addSource('transit-points', {
+    type: 'geojson',
+    data: transit_points_data
+  })
 
+  map.addSource('transit-lines', {
+    type: 'geojson',
+    data: transit_lines_data
+  })
 
   map.addSource('bicycle-points', {
     type: 'geojson',
@@ -53,146 +78,6 @@
   map.addSource('bicycle-lines', {
     type: 'geojson',
     data: bike_lines_data
-  })
-
-  console.log(map.getSource('bicycle-points'));
-  console.log(map.getSource('bicycle-lines'));
-
-//   map.loadImage(
-// './bikeshare.png',
-// (error, image) => {
-// if (error) throw error;
- 
-// // Add the image to the map style.
-// map.addImage('bikeshare', image);
-// })
-
-//   map.addLayer({
-//   'id': 'bikeshare-point',
-//   'type': 'symbol',
-//   'source': 'bikeshare-points',
-//   'layout': {
-// 'icon-image': 'bikeshare', // reference the image
-// 'icon-size': 0.05
-// }
-// });
-
-map.addLayer({
-    'id': 'bicycle-line',
-    'generateid': true,
-    'type': 'line',
-    'source': 'bicycle-lines',
-    'layout': {
-    'line-join': 'round',
-    'line-cap': 'round'
-    },
-    'paint': {
-    'line-color': [
-      'case',
-      ['boolean', ['feature-state', 'hover'], false],
-      'yellow',
-      '#DE3163'
-    ],
-    'line-gap-width': 1.2,
-    'line-width': 5
-    }
-    });
-
-    map.addLayer({
-  'id': 'bicycle-point',
-  'type': 'circle',
-  'source': 'bicycle-points',
-      'paint': {
-        'circle-color': 'red',
-        'circle-radius': 6,
-        'circle-stroke-width': 1.5,
-        'circle-stroke-color': 'WHITE'
-    },
-  });
-
-
-// 'layout': {
-// 'text-field': ['🚲'],
-// 'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-// 'text-radial-offset': 0.5,
-// 'text-justify': 'auto',
-// }
-
-
-
-  // 'layout': {
-  //   'icon-image': [
-  //     'match',
-  //     [ 'get', 'type' ], // type corresponds to the field name you are keying off of
-  //     [ 'bike parking' ],
-  //     'custom-marker',
-  //     [ 'pedestrian' ],
-  //     'custom-marker-2',
-  //     'custom-marker' // fallback icon
-  //   ],
-  //   // get the title name from the source's "title" property
-  //   'text-field': [ 'get', 'title' ],
-  //   'text-font': [
-  //     'Open Sans Semibold',
-  //     'Arial Unicode MS Bold'
-  //   ],
-  //   'text-offset': [ 0, 1.25 ],
-  //   'text-anchor': 'top'
-  // }
-
-}
-
-  //   map.addLayer({
-  // 'id': 'bikeshare-point',
-  // 'type': 'circle',
-  // 'source': 'bikeshare-points',
-  //     'paint': {
-  //       'circle-color': 'red',
-  //       'circle-radius': 6,
-  //       'circle-stroke-width': 1.5,
-  //       'circle-stroke-color': 'black'
-  //   },
-  // });
-
-else {
-  console.log('none yet')
-}
-
-if ($geojson_store) {
-
-  let geojson_array = $geojson_store.features;
-
-  if (map.getLayer('transit-line')) {
-
-    console.log('removing;')
-    map.removeLayer('transit-line'); 
-    map.removeLayer('transit-point'); 
-    map.removeSource('transit-points');
-    map.removeSource('transit-lines');
-  }
-
-  let transit_points_data = {
-        "type": "FeatureCollection",
-        "features": geojson_array.filter(feature => feature.properties?.type != "route" && feature.properties?.amenity != "bicycle_rental" && feature.properties?.shop != "bicycle")
-    }
-
-    let transit_lines_data = {
-        "type": "FeatureCollection",
-        "features": geojson_array.filter(feature => feature.properties?.type == "route" && feature.properties?.route != "bicycle")
-    }
-
-    console.log(transit_points_data);
-    console.log(transit_lines_data);
-
-
-  map.addSource('transit-points', {
-    type: 'geojson',
-    data: transit_points_data
-  })
-
-  map.addSource('transit-lines', {
-    type: 'geojson',
-    data: transit_lines_data
   })
 
 map.addLayer({
@@ -227,168 +112,44 @@ map.addLayer({
   },
 });
 
+map.addLayer({
+    'id': 'bicycle-line',
+    'generateid': true,
+    'type': 'line',
+    'source': 'bicycle-lines',
+    'layout': {
+    'line-join': 'round',
+    'line-cap': 'round'
+    },
+    'paint': {
+    'line-color': [
+      'case',
+      ['boolean', ['feature-state', 'hover'], false],
+      'yellow',
+      '#DE3163'
+    ],
+    'line-gap-width': 1.2,
+    'line-width': 5
+    }
+    });
+
+    map.addLayer({
+  'id': 'bicycle-point',
+  'type': 'circle',
+  'source': 'bicycle-points',
+      'paint': {
+        'circle-color': 'red',
+        'circle-radius': 6,
+        'circle-stroke-width': 1.5,
+        'circle-stroke-color': 'WHITE'
+    },
+  });
+
 }
 else {
 console.log('none yet')
 }
 
-
-//   let geojson_array = $geojson_store.features;
-
-//   console.log(geojson_array);
-
-//   console.log(geojson_array.filter(feature => feature.geometry.type == "MultiLineString"));
-//   console.log(geojson_array.filter(feature => feature.geometry.type == "Point"));
-
-//   map.addSource('transit-line', {
-//     type: 'geojson',
-//     data: $geojson_store
-//   })
-
-//   // map.addSource('transit-line', {
-//   //   type: 'geojson',
-//   //   data: {
-//   //       "type": "FeatureCollection",
-//   //       "features": geojson_array.filter(feature => feature.geometry.type == "MultiLineString")
-//   //   }
-//   // })
-
-//   // map.addSource('transit-point', {
-//   //   type: 'geojson',
-//   //   data: {
-//   //       "type": "FeatureCollection",
-//   //       "features": geojson_array.filter(feature => feature.geometry.type == "Point")
-//   //   }
-//   // })
-
-//   map.addLayer({
-//     'id': 'transit-line',
-//     'type': 'line',
-//     'source': 'transit-line',
-//     'layout': {
-//     'line-join': 'round',
-//     'line-cap': 'round'
-//     },
-//     'paint': {
-//     'line-color': 'purple',
-//     'line-width': 8
-//     }
-//     });
-
-
-// map.addLayer({
-// 'id': 'transit-point',
-// 'type': 'circle',
-// 'source': 'transit-line',
-//     'paint': {
-//       'circle-color': '#11b4da',
-//       'circle-radius': 6,
-//       'circle-stroke-width': 1.5,
-//       'circle-stroke-color': 'black'
-//   },
-// });
-
-
-//   if (map.getSource('content')) {
-//     console.log('exists');
-//     let data = {
-//         "type": "FeatureCollection",
-//         "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-//         "features": $points_prompt_store,
-//     }
-//     map.getSource('content').setData(data);
-//   }
-
-//   // If the map source hasn't yet been drawn, then we do everything from scratch — this happens on initial page load
-//   else {
-
-//   map.addSource('content', {
-//     type: 'geojson',
-    
-//     // Point to GeoJSON data. This example visualizes all points for the selected prompt
-//     // data:  {
-//     //     "type": "FeatureCollection",
-//     //     "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-//     //     "features": $points_prompt_store,
-//     // },
-//     cluster: true,
-//     clusterMaxZoom: 14, // Max zoom to cluster points on
-//     clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
-//   })
-
-//   map.addLayer({
-//     id: 'clusters',
-//     type: 'circle',
-//     source: 'content',
-//     filter: [ 'has', 'point_count' ],
-//     paint: {
-//       // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-//       // with three steps to implement three types of circles:
-//       //   * Blue, 20px circles when point count is less than 100
-//       //   * Yellow, 30px circles when point count is between 100 and 750
-//       //   * Pink, 40px circles when point count is greater than or equal to 750
-//       'circle-color': [
-//         'step',
-//         [ 'get', 'point_count' ],
-//         '#51bbd6',
-//         100,
-//         '#f1f075',
-//         750,
-//         '#f28cb1'
-//       ],
-//       'circle-radius': [
-//         'step',
-//         [ 'get', 'point_count' ],
-//         20,
-//         100,
-//         30,
-//         750,
-//         40
-//       ]
-//     }
-//   })
-
-//   map.addLayer({
-//     id: 'cluster-count',
-//     type: 'symbol',
-//     source: 'content',
-//     filter: [ 'has', 'point_count' ],
-//     layout: {
-//       'text-field': '{point_count_abbreviated}',
-//       'text-font': [ 'DIN Offc Pro Medium', 'Arial Unicode MS Bold' ],
-//       'text-size': 12
-//     }
-//   })
-
-//   map.addLayer({
-//     id: 'unclustered-point',
-//     type: 'circle',
-//     source: 'content',
-//     filter: [ '!', [ 'has', 'point_count' ] ],
-//     paint: {
-//       'circle-color': '#11b4da',
-//       'circle-radius': 6,
-//       'circle-stroke-width': 1.5,
-//       'circle-stroke-color': 'black'
-//     }
-//   })
-
-// }
-
-  // map.on('click', 'transit', function (e) {
-  //   const features = map.queryRenderedFeatures(e.point, {
-  //     layers: [ 'transit' ]
-  //   })
-  //   const clusterId = features[0].properties.cluster_id
-  //   map.getSource('content').getClusterExpansionZoom(clusterId, function (err, zoom) {
-  //     if (err) { return }
-
-  //     map.easeTo({
-  //       center: features[0].geometry.coordinates,
-  //       zoom: zoom
-  //     })
-  //   })
-  // })
 
   map.on('mouseenter', 'bicycle-point', function () {
     map.getCanvas().style.cursor = 'pointer'
@@ -642,17 +403,23 @@ function addPopup(e, coordinates) {
       document.getElementById('mini-scroller').remove();
     }
 
-    let popupHTML;
+    const popups = document.getElementsByClassName('mapboxgl-popup-anchor-top');
+    
+    while(popups.length > 0){
+        popups[0].parentNode.removeChild(popups[0]);
+    }
 
-    if (e.features[0]._vectorTileFeature?.properties?.network) {
-      popupHTML = e.features[0]._vectorTileFeature?.properties?.network
-    }
-    else if (e.features[0]._vectorTileFeature.properties?.name) {
-      popupHTML = e.features[0]._vectorTileFeature?.properties?.name
-    }
-    else {
-      popupHTML = "Transit Station"
-    }
+    // let popupHTML;
+
+    // if (e.features[0]._vectorTileFeature?.properties?.network) {
+    //   popupHTML = e.features[0]._vectorTileFeature?.properties?.network
+    // }
+    // else if (e.features[0]._vectorTileFeature.properties?.name) {
+    //   popupHTML = e.features[0]._vectorTileFeature?.properties?.name
+    // }
+    // else {
+    //   popupHTML = "Transit Station"
+    // }
     
 
     new mapbox.Popup({
