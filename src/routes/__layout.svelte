@@ -556,7 +556,7 @@ console.log(mode);
     {center}
     bind:zoom
   >
-  {#if create_mode && selected_location}
+  {#if selected_location}
   <Marker lat={selected_location.lat} lng={selected_location.lng}></Marker>
   {/if}
   {#key unique}

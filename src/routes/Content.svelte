@@ -390,46 +390,6 @@ console.log('none yet')
   //   })
   // })
 
-  map.on('click', 'bicycle-point', function (e) {
-
-    console.log(e);
-    const coordinates = e.lngLat;
-    // const coordinates = e.features[0].geometry.coordinates.slice();
-  
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-    //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-    // }
-  
-    // should be centered, but need to figure out the map dimensions first
-    console.log(coordinates);
-    let updated_center;
-    screen.width < 600 ? updated_center = [ coordinates[0], coordinates[1] - 0.025 ] : updated_center = [ coordinates[0], coordinates[1] - 0.015 ];
-    // let updated_center = [ coordinates[0], coordinates[1] - 0.015 ]
-    // console.log(updated_center);
-    // map.setCenter(updated_center)
-
-    // There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
-    // So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
-    if (document.getElementById('mini-scroller')) {
-      console.log('present');
-      document.getElementById('mini-scroller').remove();
-    }
-
-    new mapbox.Popup({})
-      .setLngLat(coordinates)
-      .setHTML('<div id="mini-scroller"></div>')
-      .addTo(map)
-
-    // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
-    new MiniScroller({ 
-      target: document.getElementById('mini-scroller'), 
-      props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, shop:e.features[0]._vectorTileFeature.properties?.shop, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
-     }) // eslint-disable-line no-new
-  })
-
   map.on('mouseenter', 'bicycle-point', function () {
     map.getCanvas().style.cursor = 'pointer'
   })
@@ -462,6 +422,43 @@ console.log('none yet')
     map.getCanvas().style.cursor = ''
   })
 
+  map.on('click', 'bicycle-point', function (e) {
+
+console.log(e);
+const coordinates = e.lngLat;
+// const coordinates = e.features[0].geometry.coordinates.slice();
+
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+// while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+//   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+// }
+
+// should be centered, but need to figure out the map dimensions first
+console.log(coordinates);
+let updated_center;
+screen.width < 600 ? updated_center = [ coordinates[0], coordinates[1] - 0.025 ] : updated_center = [ coordinates[0], coordinates[1] - 0.015 ];
+// let updated_center = [ coordinates[0], coordinates[1] - 0.015 ]
+// console.log(updated_center);
+// map.setCenter(updated_center)
+
+// There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
+// So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
+// if (document.getElementById('mini-scroller')) {
+//   console.log('present');
+//   document.getElementById('mini-scroller').remove();
+// }
+
+addPopup(e, coordinates);
+
+// // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
+// new MiniScroller({ 
+//   target: document.getElementById('mini-scroller'), 
+//   props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, shop:e.features[0]._vectorTileFeature.properties?.shop, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
+//  }) // eslint-disable-line no-new
+})
+
 
   map.on('click', 'transit-point', function (e) {
     console.log(e);
@@ -488,25 +485,7 @@ console.log('none yet')
     // console.log(updated_center);
     // map.setCenter(updated_center)
 
-    console.log('test');
-
-    // There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
-    // So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
-    if (document.getElementById('mini-scroller')) {
-      console.log('present');
-      document.getElementById('mini-scroller').remove();
-    }
-
-    new mapbox.Popup({})
-      .setLngLat(coordinates)
-      .setHTML('<div id="mini-scroller"></div>')
-      .addTo(map)
-
-    // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
-    new MiniScroller({ 
-      target: document.getElementById('mini-scroller'), 
-      props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
-     }) // eslint-disable-line no-new
+    addPopup(e, coordinates);
   })
 
   map.on('click', 'transit-line', function (e) {
@@ -536,23 +515,8 @@ console.log('none yet')
 
     console.log('test');
 
-    // There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
-    // So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
-    if (document.getElementById('mini-scroller')) {
-      console.log('present');
-      document.getElementById('mini-scroller').remove();
-    }
+    addPopup(e, coordinates);
 
-    new mapbox.Popup({})
-      .setLngLat(coordinates)
-      .setHTML('<div id="mini-scroller"></div>')
-      .addTo(map)
-
-    // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
-    new MiniScroller({ 
-      target: document.getElementById('mini-scroller'), 
-      props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
-     }) // eslint-disable-line no-new
   })
 
   map.on('click', 'bicycle-line', function (e) {
@@ -581,24 +545,10 @@ console.log('none yet')
     // map.setCenter(updated_center)
 
     console.log('test');
+    
+    addPopup(e, coordinates);
 
-    // There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
-    // So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
-    if (document.getElementById('mini-scroller')) {
-      console.log('present');
-      document.getElementById('mini-scroller').remove();
-    }
 
-    new mapbox.Popup({})
-      .setLngLat(coordinates)
-      .setHTML('<div id="mini-scroller"></div>')
-      .addTo(map)
-
-    // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
-    new MiniScroller({ 
-      target: document.getElementById('mini-scroller'), 
-      props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
-     }) // eslint-disable-line no-new
   })
 
   let lineID = null;
@@ -683,14 +633,49 @@ e.target.checked == false ? map.setLayoutProperty(`${e.target.name}`, 'visibilit
 
 // e.target.name
 }
+
+function addPopup(e, coordinates) {
+          // There is a bug that occurs, when you have clicked on one point and are viewing the popup.  If you click on another point, while the first popup is visible, then the popup for the other point will incorrectly display.
+    // So this conditional checks to see if a popup already exists on the page, and removes it if it does, to bypass that bug.  Not sure about the behavior causing the root issue — this was simpler for now.
+    if (document.getElementById('mini-scroller')) {
+      console.log('present');
+      document.getElementById('mini-scroller').remove();
+    }
+
+    let popupHTML;
+
+    if (e.features[0]._vectorTileFeature?.properties?.network) {
+      popupHTML = e.features[0]._vectorTileFeature?.properties?.network
+    }
+    else if (e.features[0]._vectorTileFeature.properties?.name) {
+      popupHTML = e.features[0]._vectorTileFeature?.properties?.name
+    }
+    else {
+      popupHTML = "Transit Station"
+    }
+    
+
+    new mapbox.Popup({
+      closeOnClick: true,
+    })
+      .setLngLat(coordinates)
+      .setHTML(`<div id="mini-scroller"></div>`)
+      .addTo(map)
+
+          // The miniscroller component is what appears in the popup, and we instantiate it with props from the selected point (most importantly, content) so we can show the content from that point in the popup.
+    new MiniScroller({ 
+      target: document.getElementById('mini-scroller'), 
+      props: { layer:e.features[0].layer.id, properties:e.features[0]._vectorTileFeature.properties, id:e.features[0]._vectorTileFeature.properties.id, network:e.features[0]._vectorTileFeature.properties.network, name:e.features[0]._vectorTileFeature.properties.name } 
+     }) // eslint-disable-line no-new
+}
 </script>
 
 <div style="position: absolute; background: white; top: 5%; right: 5%; display: block; padding: 10px;">
-  
-  <p>Legend</p>
 
   <div on:input|preventDefault={toggleMapLayer}>
+    {#if $geojson_store}
     <input type="checkbox" checked name="bicycle-line">
+    {/if}
     <label for="bicycle-lines">
       <svg style="vertical-align: text-top" width="23" height="15" viewBox="0 0 33 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 10H33" stroke="#DE3163" stroke-width="20"/>
@@ -700,7 +685,9 @@ e.target.checked == false ? map.setLayoutProperty(`${e.target.name}`, 'visibilit
     </div>
 
     <div on:input|preventDefault={toggleMapLayer}>
+      {#if $geojson_store}
       <input type="checkbox" name="transit-line" checked> 
+      {/if}
       <svg style="vertical-align: text-top" width="23" height="15" viewBox="0 0 33 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 10H33" stroke="indigo" stroke-width="20"/>
         </svg>        
@@ -708,7 +695,9 @@ e.target.checked == false ? map.setLayoutProperty(`${e.target.name}`, 'visibilit
       </div>
 
     <div on:input|preventDefault={toggleMapLayer}>
+      {#if $geojson_store}
   <input type="checkbox" name="bicycle-point" checked>
+  {/if}
   <label for="bicycle-points">
     <svg style="vertical-align: top" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="8.5" cy="8.5" r="6.5" fill="#FF0000" stroke="white" stroke-width="2"/>
@@ -718,7 +707,9 @@ e.target.checked == false ? map.setLayoutProperty(`${e.target.name}`, 'visibilit
   </div>
 
   <div on:input|preventDefault={toggleMapLayer}>
+    {#if $geojson_store}
     <input type="checkbox" name="transit-point" checked>
+    {/if}
     <label for="bicycle-points">
       <svg style="vertical-align: top" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.5 14.25C11.2279 14.25 14.25 11.2279 14.25 7.5C14.25 3.77208 11.2279 0.75 7.5 0.75C3.77208 0.75 0.75 3.77208 0.75 7.5C0.75 11.2279 3.77208 14.25 7.5 14.25Z" fill="#0096FF" stroke="black" stroke-width="1.5"/>

@@ -40,17 +40,17 @@
     )
     marker = new mapbox.Marker(Object.assign(namedParams, markerOptions))
   
-    if (popup) {
-      const namedPopupParams = { offset: popupOffset, className: popupClassName }
-      const popupEl = new mapbox.Popup(Object.assign(namedPopupParams, popupOptions))
-      if (elementPopup.hasChildNodes()) {
-        popupEl.setDOMContent(elementPopup)
-      } else {
-        popupEl.setText(label)
-      }
+    // if (popup) {
+    //   const namedPopupParams = { offset: popupOffset, className: popupClassName }
+    //   const popupEl = new mapbox.Popup(Object.assign(namedPopupParams, popupOptions))
+    //   if (elementPopup.hasChildNodes()) {
+    //     popupEl.setDOMContent(elementPopup)
+    //   } else {
+    //     popupEl.setText(label)
+    //   }
 
-      marker.setPopup(popupEl)
-    }
+    //   marker.setPopup(popupEl)
+    // }
 
     marker
       .setLngLat({ lng, lat })
@@ -68,6 +68,6 @@
 <slot></slot>
 </div>
 
-<div class='popup' bind:this={elementPopup}>
+<!-- <div class='popup' bind:this={elementPopup}>
   <slot name="popup"></slot>
-</div>
+</div> -->

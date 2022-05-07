@@ -15,7 +15,11 @@
 {/if}
 {#if name}
 {name}
-{:else}
+{:else if layer == "bicycle-line"}
+Bike Route
+{:else if layer == "transit-line"}
+Transit Route
+{:else if layer == "transit-point"}
 Transit Station
 {/if}
 </p>
