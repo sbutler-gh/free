@@ -81,7 +81,9 @@ import { contextKey } from '$lib/components.js'
     console.log(json);
     
     let coordinates = json.loc.split(',');
-    coordinates = {"lat": 38.886503, "lng": -77.1842802};
+    console.log(coordinates);
+    coordinates = {"lat": coordinates[0], "lng": coordinates[1]};
+    // coordinates = {"lat": 38.886503, "lng": -77.1842802};
     center = coordinates;
     $map_center_store = center;
 
