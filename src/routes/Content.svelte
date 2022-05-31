@@ -1,6 +1,7 @@
 <script>
   import { getContext } from 'svelte'
-  import { contextKey } from '$lib/components.js'
+  import { contextKey, Geocoder } from '$lib/components.js'
+  import { mapboxToken } from '$lib/conf.js'
   import MiniScroller from './MiniScroller.svelte'
   import { bikeshare_transit_store, points_prompt_store, bikeshare_store, transit_store, geojson_store } from "$lib/stores.js"
   import { get } from 'svelte/store';
@@ -437,11 +438,11 @@ function addPopup(e, coordinates) {
 }
 </script>
 
-{#if $geojson_store}
+<div id="input-container" style="position: absolute; background: white; right: 5%; display: block; padding: 10px;">
+  <Geocoder placeholder={"Enter new location"} accessToken={mapboxToken} on:result={function(e) {console.log(e); map.setCenter(e.detail.result.center)}}></Geocoder>
 
-<div style="position: absolute; background: white; top: 5%; right: 5%; display: block; padding: 10px;">
-
-  <div on:input|preventDefault={toggleMapLayer}>
+  {#if $geojson_store}
+  <div style="margin-top: 15px" on:input|preventDefault={toggleMapLayer}>
     {#if $geojson_store}
     <input type="checkbox" checked name="bicycle-line">
     {/if}
@@ -485,6 +486,23 @@ function addPopup(e, coordinates) {
         </svg>        
        Transit Stations</label>
     </div>
+    {/if}
 </div>
 
-{/if}
+<style>
+  #input-container {
+    top: 5%; 
+    right: 5%;
+  }
+
+  @media only screen and (max-width: 600px) {
+
+  #input-container {
+    /* top: 0%; 
+    right: 0%; */
+    max-width: 250px !important;
+    top: 0;
+    left: 0;
+  }
+  }
+</style>
